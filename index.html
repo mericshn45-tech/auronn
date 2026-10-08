@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08090d" />
+  <meta name="description" content="Auronn — mobil oyunlar ve dijital deneyimler geliştiren bağımsız stüdyo. Puzzle Atlas ile dünyayı parça parça keşfet." />
+  <title>Auronn — Games & Apps</title>
+  <style>
+    :root{
+      --bg:#07080b;--bg2:#0d0f16;--panel:rgba(255,255,255,.055);--line:rgba(255,255,255,.10);
+      --text:#f5f6f8;--muted:#9ca2b2;--accent:#8f6bff;--accent2:#5d42ff;--glow:rgba(123,92,255,.28);
+      --radius:26px;--shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+      radial-gradient(circle at 15% 0%,rgba(111,76,255,.16),transparent 28%),
+      radial-gradient(circle at 85% 10%,rgba(60,130,255,.10),transparent 25%),var(--bg);color:var(--text);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1180px,calc(100% - 36px));margin:auto}
+    nav{position:sticky;top:0;z-index:50;background:rgba(7,8,11,.72);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .navin{height:72px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.18em;font-size:15px}
+    .mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,var(--accent),#3f2be8);display:grid;place-items:center;box-shadow:0 8px 24px var(--glow);font-weight:900}
+    .links{display:flex;align-items:center;gap:26px;color:#c9ccda;font-size:14px}
+    .links a:hover{color:white}.lang{border:1px solid var(--line);background:var(--panel);color:white;padding:9px 12px;border-radius:999px;cursor:pointer}
+    .hero{min-height:760px;display:grid;align-items:center;position:relative;padding:88px 0 70px}
+    .hero:after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-160px;top:40px;background:radial-gradient(circle,rgba(115,85,255,.25),transparent 62%);filter:blur(8px);pointer-events:none}
+    .heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+    .eyebrow{display:inline-flex;gap:9px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 12px;border-radius:999px;color:#cfd1dc;font-size:13px}
+    .dot{width:7px;height:7px;border-radius:50%;background:#82f3bd;box-shadow:0 0 14px #82f3bd}
+    h1{font-size:clamp(54px,8vw,104px);line-height:.91;margin:24px 0 20px;letter-spacing:-.055em}
+    .grad{background:linear-gradient(110deg,#fff 20%,#a78fff 62%,#6d82ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:clamp(18px,2.4vw,24px);line-height:1.55;color:#aeb3c2;max-width:620px}
+    .heroBtns{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px;border-radius:14px;border:1px solid var(--line);font-weight:700;font-size:14px;transition:.2s}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;box-shadow:0 12px 34px var(--glow)}.btn:hover{transform:translateY(-2px)}
+    .phoneWrap{position:relative;display:grid;place-items:center}.phone{width:min(340px,82vw);aspect-ratio:9/18.8;border:1px solid rgba(255,255,255,.18);border-radius:46px;background:linear-gradient(160deg,#171b28,#090a0e 58%);box-shadow:0 36px 90px rgba(0,0,0,.55),0 0 0 8px rgba(255,255,255,.025);padding:14px;transform:rotate(3deg)}
+    .screen{height:100%;border-radius:35px;overflow:hidden;background:linear-gradient(180deg,#201b4a 0%,#0d0f1c 44%,#08090e 100%);position:relative;padding:26px 18px}.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:92px;height:24px;border-radius:20px;background:#050506}
+    .miniLogo{margin-top:38px;font-size:12px;letter-spacing:.18em;color:#c8c1ff;font-weight:800}.screen h3{font-size:34px;line-height:1.0;margin:12px 0 10px}.screen p{color:#b0b3c2;font-size:13px;line-height:1.5}.map{height:220px;margin-top:22px;border-radius:22px;background:
+      radial-gradient(circle at 28% 35%,#7d65ff 0 4%,transparent 4.8%),radial-gradient(circle at 64% 46%,#5e82ff 0 5%,transparent 5.8%),radial-gradient(circle at 48% 70%,#9b78ff 0 3.4%,transparent 4.2%),linear-gradient(145deg,#26214b,#13162d);border:1px solid rgba(255,255,255,.10);position:relative;overflow:hidden}
+    .map:before{content:"";position:absolute;inset:18px;background:repeating-linear-gradient(25deg,transparent 0 26px,rgba(255,255,255,.035) 27px 28px)}
+    .chiprow{display:flex;gap:8px;margin-top:15px}.chip{flex:1;height:54px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07)}
+    section{padding:92px 0}.sectionHead{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px}.kicker{color:#9881ff;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.sectionHead h2{font-size:clamp(34px,5vw,58px);line-height:1;margin:10px 0 0;letter-spacing:-.035em}.sectionHead p{max-width:470px;color:var(--muted);line-height:1.65}
+    .gameCard{border:1px solid var(--line);border-radius:32px;background:linear-gradient(140deg,rgba(143,107,255,.12),rgba(255,255,255,.035) 45%,rgba(255,255,255,.02));padding:clamp(24px,5vw,52px);display:grid;grid-template-columns:1fr .9fr;gap:42px;align-items:center;box-shadow:var(--shadow)}
+    .badge{display:inline-flex;border-radius:999px;padding:8px 11px;background:rgba(143,107,255,.16);border:1px solid rgba(164,139,255,.26);color:#c7b9ff;font-size:12px;font-weight:800}.gameCard h3{font-size:clamp(34px,5vw,62px);margin:18px 0 12px;letter-spacing:-.045em}.gameCard p{color:#aeb2c0;line-height:1.7;font-size:17px}.features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px}.feature{padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}.feature b{display:block;font-size:14px;margin-bottom:4px}.feature span{font-size:12px;color:var(--muted)}
+    .puzzleArt{aspect-ratio:1/1;border-radius:28px;background:linear-gradient(145deg,#5b48d5,#171a34);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.12)}.piece{position:absolute;width:38%;aspect-ratio:1;border-radius:24px;background:linear-gradient(150deg,#c9b5ff,#6e63e8);box-shadow:0 16px 40px rgba(0,0,0,.28)}.p1{left:11%;top:14%;transform:rotate(-9deg)}.p2{right:10%;top:24%;background:linear-gradient(150deg,#7ab8ff,#3d5dde);transform:rotate(12deg)}.p3{left:31%;bottom:9%;background:linear-gradient(150deg,#f0d7ff,#8d64ec);transform:rotate(5deg)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.stat{padding:26px;border-radius:22px;border:1px solid var(--line);background:var(--panel)}.stat strong{font-size:30px;display:block}.stat span{color:var(--muted);font-size:13px}
+    .aboutGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.aboutCard{padding:30px;border-radius:26px;border:1px solid var(--line);background:var(--panel);min-height:220px}.aboutCard h3{font-size:24px;margin:0 0 12px}.aboutCard p{color:var(--muted);line-height:1.7}.icon{font-size:26px;margin-bottom:28px}
+    .contact{border:1px solid var(--line);border-radius:30px;padding:42px;background:linear-gradient(135deg,rgba(117,87,255,.12),rgba(255,255,255,.025));display:flex;justify-content:space-between;align-items:center;gap:24px}.contact h2{font-size:clamp(32px,4vw,50px);margin:0 0 9px}.contact p{color:var(--muted);margin:0}
+    footer{padding:34px 0 44px;border-top:1px solid rgba(255,255,255,.06);color:#8f94a4;font-size:13px}.foot{display:flex;justify-content:space-between;gap:20px;align-items:center}.footLinks{display:flex;gap:18px;flex-wrap:wrap}
+    .reveal{opacity:0;transform:translateY(18px);transition:.7s ease}.reveal.show{opacity:1;transform:none}
+    @media(max-width:850px){.links a:not(.lang){display:none}.hero{min-height:auto;padding-top:60px}.heroGrid,.gameCard,.aboutGrid{grid-template-columns:1fr}.phoneWrap{margin-top:18px}.phone{width:min(300px,78vw)}.sectionHead{display:block}.stats{grid-template-columns:1fr}.contact{display:block}.contact .btn{margin-top:22px}.foot{display:block}.footLinks{margin-top:16px}.features{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.wrap{width:min(100% - 24px,1180px)}.features{grid-template-columns:1fr}.heroBtns .btn{width:100%}.gameCard{padding:20px;border-radius:24px}.sectionHead h2{font-size:38px}}
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wrap navin">
+      <a class="brand" href="#top"><span class="mark">A</span><span>AURONN</span></a>
+      <div class="links">
+        <a href="#games" data-tr="Oyunlarımız" data-en="Games">Oyunlarımız</a>
+        <a href="#about" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
+        <a href="#contact" data-tr="İletişim" data-en="Contact">İletişim</a>
+        <button class="lang" id="langBtn" aria-label="Dil değiştir">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap heroGrid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span><span data-tr="Bağımsız oyun stüdyosu" data-en="Independent game studio">Bağımsız oyun stüdyosu</span></div>
+          <h1><span class="grad">Auronn</span><br><span data-tr="oyunları farklı hissettirir." data-en="makes games feel different.">oyunları farklı hissettirir.</span></h1>
+          <p class="lead" data-tr="Mobil için sade, akıcı ve tekrar oynamak isteyeceğiniz oyun deneyimleri geliştiriyoruz." data-en="We create clean, fluid mobile game experiences designed to make you want to play again.">Mobil için sade, akıcı ve tekrar oynamak isteyeceğiniz oyun deneyimleri geliştiriyoruz.</p>
+          <div class="heroBtns">
+            <a class="btn primary" href="#games" data-tr="Oyunları keşfet →" data-en="Explore games →">Oyunları keşfet →</a>
+            <a class="btn" href="#contact" data-tr="Bize ulaşın" data-en="Contact us">Bize ulaşın</a>
+          </div>
+        </div>
+        <div class="phoneWrap" aria-hidden="true">
+          <div class="phone">
+            <div class="screen">
+              <div class="island"></div>
+              <div class="miniLogo">PUZZLE ATLAS</div>
+              <h3 data-tr="Dünyayı parça parça keşfet." data-en="Discover the world piece by piece.">Dünyayı parça parça keşfet.</h3>
+              <p data-tr="Şehirleri tamamla, ülkeleri aç ve pasaportunu doldur." data-en="Complete cities, unlock countries and fill your passport.">Şehirleri tamamla, ülkeleri aç ve pasaportunu doldur.</p>
+              <div class="map"></div><div class="chiprow"><div class="chip"></div><div class="chip"></div><div class="chip"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="games">
+      <div class="wrap">
+        <div class="sectionHead reveal">
+          <div><div class="kicker" data-tr="Oyunlarımız" data-en="Our games">Oyunlarımız</div><h2 data-tr="İlk yolculuk başlıyor." data-en="The first journey begins.">İlk yolculuk başlıyor.</h2></div>
+          <p data-tr="Auronn'un ilk oyunu Puzzle Atlas; yapboz çözmeyi keşif, ilerleme ve koleksiyon sistemiyle birleştiriyor." data-en="Auronn's first game, Puzzle Atlas, combines jigsaw puzzles with exploration, progression and collecting.">Auronn'un ilk oyunu Puzzle Atlas; yapboz çözmeyi keşif, ilerleme ve koleksiyon sistemiyle birleştiriyor.</p>
+        </div>
+        <div class="gameCard reveal">
+          <div>
+            <span class="badge" data-tr="YAKINDA • ANDROID" data-en="COMING SOON • ANDROID">YAKINDA • ANDROID</span>
+            <h3>Puzzle Atlas</h3>
+            <p data-tr="Dünyayı parça parça keşfet. Şehirlerin fotoğraflarını tamamla, ülkeleri aç, pasaportunu doldur ve her yeni bölümde biraz daha ilerle." data-en="Discover the world piece by piece. Complete city photos, unlock countries, fill your passport and progress with every new puzzle.">Dünyayı parça parça keşfet. Şehirlerin fotoğraflarını tamamla, ülkeleri aç, pasaportunu doldur ve her yeni bölümde biraz daha ilerle.</p>
+            <div class="features">
+              <div class="feature"><b data-tr="Gerçek yapboz hissi" data-en="True jigsaw feel">Gerçek yapboz hissi</b><span data-tr="Birbirine geçen parçalar" data-en="Interlocking pieces">Birbirine geçen parçalar</span></div>
+              <div class="feature"><b data-tr="Dünya keşfi" data-en="World exploration">Dünya keşfi</b><span data-tr="Ülkeler ve şehirler" data-en="Countries and cities">Ülkeler ve şehirler</span></div>
+              <div class="feature"><b data-tr="Pasaport sistemi" data-en="Passport system">Pasaport sistemi</b><span data-tr="İlerlemeni koleksiyonlaştır" data-en="Collect your progress">İlerlemeni koleksiyonlaştır</span></div>
+              <div class="feature"><b data-tr="Günlük görevler" data-en="Daily challenges">Günlük görevler</b><span data-tr="Her gün yeni hedef" data-en="A new goal every day">Her gün yeni hedef</span></div>
+            </div>
+          </div>
+          <div class="puzzleArt" aria-hidden="true"><div class="piece p1"></div><div class="piece p2"></div><div class="piece p3"></div></div>
+        </div>
+        <div class="stats reveal">
+          <div class="stat"><strong>10</strong><span data-tr="ülke ile başlangıç" data-en="countries at launch">ülke ile başlangıç</span></div>
+          <div class="stat"><strong>50</strong><span data-tr="şehir keşfi" data-en="city discoveries">şehir keşfi</span></div>
+          <div class="stat"><strong>200</strong><span data-tr="hikâye bulmacası" data-en="story puzzles">hikâye bulmacası</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="sectionHead reveal"><div><div class="kicker" data-tr="Auronn" data-en="Auronn">Auronn</div><h2 data-tr="Küçük ekip. Büyük fikirler." data-en="Small team. Big ideas.">Küçük ekip. Büyük fikirler.</h2></div><p data-tr="Oyuncunun ilk dokunuşundan son ekrana kadar her ayrıntının akıcı, anlaşılır ve karakterli hissettirmesine önem veriyoruz." data-en="From the first tap to the final screen, we care about making every detail feel fluid, clear and distinctive.">Oyuncunun ilk dokunuşundan son ekrana kadar her ayrıntının akıcı, anlaşılır ve karakterli hissettirmesine önem veriyoruz.</p></div>
+        <div class="aboutGrid">
+          <div class="aboutCard reveal"><div class="icon">✦</div><h3 data-tr="Oynanış önce gelir" data-en="Gameplay comes first">Oynanış önce gelir</h3><p data-tr="Gösterişli olmaktan önce iyi hissettiren, öğrenmesi kolay ve gelişmesi tatmin edici oyun sistemleri kuruyoruz." data-en="We build systems that feel good first: easy to learn, satisfying to master and rewarding to return to.">Gösterişli olmaktan önce iyi hissettiren, öğrenmesi kolay ve gelişmesi tatmin edici oyun sistemleri kuruyoruz.</p></div>
+          <div class="aboutCard reveal"><div class="icon">◈</div><h3 data-tr="Mobil için tasarlandı" data-en="Designed for mobile">Mobil için tasarlandı</h3><p data-tr="Arayüz, performans ve kontrol yapısını mobil cihazlarda hızlı ve doğal hissettirecek şekilde düşünüyoruz." data-en="Interfaces, performance and controls are shaped to feel fast and natural on mobile devices.">Arayüz, performans ve kontrol yapısını mobil cihazlarda hızlı ve doğal hissettirecek şekilde düşünüyoruz.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact reveal">
+          <div><div class="kicker" data-tr="İletişim" data-en="Contact">İletişim</div><h2 data-tr="Auronn'a ulaşın." data-en="Get in touch with Auronn.">Auronn'a ulaşın.</h2><p data-tr="Destek, iş birlikleri ve genel sorular için bize e-posta gönderebilirsiniz." data-en="Email us for support, collaborations and general inquiries.">Destek, iş birlikleri ve genel sorular için bize e-posta gönderebilirsiniz.</p></div>
+          <a class="btn primary" href="mailto:mericshn45@gmail.com">mericshn45@gmail.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot"><div>© <span id="year"></span> Auronn. <span data-tr="Tüm hakları saklıdır." data-en="All rights reserved.">Tüm hakları saklıdır.</span></div><div class="footLinks"><a href="https://mericshn45-tech.github.io/auronn-privacy/" target="_blank" rel="noopener" data-tr="Gizlilik Politikası" data-en="Privacy Policy">Gizlilik Politikası</a><a href="mailto:mericshn45@gmail.com" data-tr="Destek" data-en="Support">Destek</a></div></div>
+  </footer>
+
+  <script>
+    const btn=document.getElementById('langBtn');let lang='tr';
+    btn.addEventListener('click',()=>{lang=lang==='tr'?'en':'tr';document.documentElement.lang=lang;document.querySelectorAll('[data-tr]').forEach(el=>el.textContent=el.dataset[lang]);btn.textContent=lang==='tr'?'EN':'TR';});
+    document.getElementById('year').textContent=new Date().getFullYear();
+    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>
