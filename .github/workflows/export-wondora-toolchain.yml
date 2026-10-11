@@ -1,0 +1,43 @@
+name: Export Wondora Android Toolchain
+
+on:
+  push:
+    branches: [ "wondora-android-build" ]
+    paths:
+      - ".github/workflows/export-wondora-toolchain.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export_toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - name: Install Android API 36 tools
+        run: yes | sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Collect compiler tools
+        run: |
+          set -euxo pipefail
+          mkdir -p toolchain/build-tools/lib toolchain/platform
+          cp "$ANDROID_HOME/platforms/android-36/android.jar" toolchain/platform/android.jar
+          cp "$ANDROID_HOME/build-tools/36.0.0/aapt2" toolchain/build-tools/aapt2
+          cp "$ANDROID_HOME/build-tools/36.0.0/zipalign" toolchain/build-tools/zipalign
+          cp "$ANDROID_HOME/build-tools/36.0.0/lib/d8.jar" toolchain/build-tools/lib/d8.jar
+          cp "$ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar" toolchain/build-tools/lib/apksigner.jar
+          curl -fsSL -o toolchain/bundletool.jar "https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar"
+          chmod +x toolchain/build-tools/aapt2 toolchain/build-tools/zipalign
+          sha256sum toolchain/platform/android.jar toolchain/build-tools/aapt2 toolchain/build-tools/lib/d8.jar toolchain/bundletool.jar > toolchain/SHA256SUMS.txt
+      - name: Upload compiler toolchain
+        uses: actions/upload-artifact@v4
+        with:
+          name: wondora-android36-toolchain
+          path: toolchain
+          retention-days: 1
