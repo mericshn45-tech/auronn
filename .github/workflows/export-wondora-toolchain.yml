@@ -16,25 +16,59 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
-      - uses: android-actions/setup-android@v3
-      - name: Install Android API 36 tools
-        run: yes | sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Locate Android SDK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-}"
+          echo "ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-}"
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          test -d "$SDK"
+          SDKMANAGER="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$(find "$SDK/cmdline-tools" -type f -name sdkmanager | head -n 1)"
+          fi
+          test -x "$SDKMANAGER"
+          echo "SDK=$SDK" >> "$GITHUB_ENV"
+          echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
+          "$SDKMANAGER" --version
+
+      - name: Ensure Android API 36 tools
+        shell: bash
+        run: |
+          set -euxo pipefail
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          if [ ! -f "$SDK/platforms/android-36/android.jar" ]; then
+            yes | "$SDKMANAGER" "platforms;android-36"
+          fi
+          if [ ! -x "$SDK/build-tools/36.0.0/aapt2" ]; then
+            yes | "$SDKMANAGER" "build-tools;36.0.0"
+          fi
+          test -f "$SDK/platforms/android-36/android.jar"
+          test -x "$SDK/build-tools/36.0.0/aapt2"
+
       - name: Collect compiler tools
+        shell: bash
         run: |
           set -euxo pipefail
           mkdir -p toolchain/build-tools/lib toolchain/platform
-          cp "$ANDROID_HOME/platforms/android-36/android.jar" toolchain/platform/android.jar
-          cp "$ANDROID_HOME/build-tools/36.0.0/aapt2" toolchain/build-tools/aapt2
-          cp "$ANDROID_HOME/build-tools/36.0.0/zipalign" toolchain/build-tools/zipalign
-          cp "$ANDROID_HOME/build-tools/36.0.0/lib/d8.jar" toolchain/build-tools/lib/d8.jar
-          cp "$ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar" toolchain/build-tools/lib/apksigner.jar
+          cp "$SDK/platforms/android-36/android.jar" toolchain/platform/android.jar
+          cp "$SDK/build-tools/36.0.0/aapt2" toolchain/build-tools/aapt2
+          cp "$SDK/build-tools/36.0.0/zipalign" toolchain/build-tools/zipalign
+          cp "$SDK/build-tools/36.0.0/lib/d8.jar" toolchain/build-tools/lib/d8.jar
+          if [ -f "$SDK/build-tools/36.0.0/lib/apksigner.jar" ]; then
+            cp "$SDK/build-tools/36.0.0/lib/apksigner.jar" toolchain/build-tools/lib/apksigner.jar
+          fi
           curl -fsSL -o toolchain/bundletool.jar "https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar"
           chmod +x toolchain/build-tools/aapt2 toolchain/build-tools/zipalign
           sha256sum toolchain/platform/android.jar toolchain/build-tools/aapt2 toolchain/build-tools/lib/d8.jar toolchain/bundletool.jar > toolchain/SHA256SUMS.txt
+
       - name: Upload compiler toolchain
         uses: actions/upload-artifact@v4
         with:
