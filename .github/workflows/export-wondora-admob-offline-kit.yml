@@ -35,12 +35,8 @@ jobs:
           fi
           test -x "$SDKMANAGER"
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          if [ ! -f "$SDK/platforms/android-36/android.jar" ]; then
-            yes | "$SDKMANAGER" "platforms;android-36" || true
-          fi
-          if [ ! -x "$SDK/build-tools/36.0.0/aapt2" ]; then
-            yes | "$SDKMANAGER" "build-tools;36.0.0" || true
-          fi
+          if [ ! -f "$SDK/platforms/android-36/android.jar" ]; then yes | "$SDKMANAGER" "platforms;android-36" || true; fi
+          if [ ! -x "$SDK/build-tools/36.0.0/aapt2" ]; then yes | "$SDKMANAGER" "build-tools;36.0.0" || true; fi
           echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
           test -f "$SDK/platforms/android-36/android.jar"
@@ -59,6 +55,10 @@ jobs:
           EOF
           cat > /tmp/wondora-deps/build.gradle <<'EOF'
           plugins { id 'com.android.application' version '8.10.1' apply false }
+          EOF
+          cat > /tmp/wondora-deps/gradle.properties <<'EOF'
+          android.useAndroidX=true
+          org.gradle.jvmargs=-Xmx3g -Dfile.encoding=UTF-8
           EOF
           cat > /tmp/wondora-deps/app/build.gradle <<'EOF'
           plugins { id 'com.android.application' }
