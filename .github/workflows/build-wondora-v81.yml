@@ -1,0 +1,82 @@
+name: Build Wondora V81 AAB
+
+on:
+  push:
+    branches: ["wondora-v81-release"]
+    paths:
+      - ".github/workflows/build-wondora-v81.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct V81 payload
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cat .wondora-build/v81/part_* | base64 -d > /tmp/wondora_payload.xz
+          xz -t /tmp/wondora_payload.xz
+          xz -dc /tmp/wondora_payload.xz > /tmp/wondora_payload
+          file /tmp/wondora_payload
+          mkdir -p /tmp/wondora-src
+          if unzip -t /tmp/wondora_payload >/dev/null 2>&1; then
+            unzip -q /tmp/wondora_payload -d /tmp/wondora-src
+          elif tar -tf /tmp/wondora_payload >/dev/null 2>&1; then
+            tar -xf /tmp/wondora_payload -C /tmp/wondora-src
+          else
+            echo "Unsupported reconstructed payload" >&2
+            exit 1
+          fi
+          find /tmp/wondora-src -maxdepth 3 -type f | head -100
+          PROJECT="$(find /tmp/wondora-src -type f -name settings.gradle -printf '%h\n' | head -n1)"
+          test -n "$PROJECT"
+          echo "PROJECT=$PROJECT" >> "$GITHUB_ENV"
+          grep -q "versionCode 4" "$PROJECT/app/build.gradle"
+          grep -q "minSdk 24" "$PROJECT/app/build.gradle"
+          grep -q "targetSdk 36" "$PROJECT/app/build.gradle"
+          grep -q "POST_NOTIFICATIONS" "$PROJECT/app/src/main/AndroidManifest.xml"
+          grep -q "NotificationReceiver" "$PROJECT/app/src/main/AndroidManifest.xml"
+          grep -q "BootReceiver" "$PROJECT/app/src/main/AndroidManifest.xml"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android API 36
+        shell: bash
+        run: |
+          set -euxo pipefail
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11.1"
+
+      - name: Build unsigned release bundle
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd "$PROJECT"
+          gradle --no-daemon clean bundleRelease
+          AAB="$(find app/build/outputs/bundle/release -name '*.aab' | head -n1)"
+          test -s "$AAB"
+          cp "$AAB" "$GITHUB_WORKSPACE/Wondora_V81_unsigned.aab"
+          sha256sum "$GITHUB_WORKSPACE/Wondora_V81_unsigned.aab"
+
+      - name: Upload unsigned AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wondora-V81-unsigned-AAB
+          path: Wondora_V81_unsigned.aab
+          retention-days: 1
